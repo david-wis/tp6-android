@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     //ImageView imgResultado;
     FrameLayout frmLyt;
     SharedPreferences preferencia;
-    FaceServiceRestClient servicioProcImagenes;
     FragmentManager adminFragments;
     FragmentTransaction transacFragments;
     ButtonFragment buttonFragment = new ButtonFragment();
@@ -60,15 +59,8 @@ public class MainActivity extends AppCompatActivity {
         AgregarReferencias();
         preferencia = getSharedPreferences("DavidAbril", Context.MODE_PRIVATE);
         //ACA HAY QUE AGREGAR ALGO
-        String apiEndpoint = "https://brazilsouth.api.cognitive.microsoft.com/face/v1.0";
-        String subscriptionKey = "4a587307bc774143ab33f38c497fd8ad";
         adminFragments = getFragmentManager();
         InicializarBotones();
-        try{
-            servicioProcImagenes = new FaceServiceRestClient(apiEndpoint, subscriptionKey);
-        } catch(Exception e){
-            Log.d("Error", "Error: " + e.getMessage());
-        }
     }
 
 
@@ -108,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         //TODO: Podemos poner un cosito de cargando aca
         if (requestCode == CODIGO_TOMAR_FOTO && resultCode == RESULT_OK) {
-
+            //TODO: hace esto abril :v
         } else if (requestCode == CODIGO_OBTENER_FOTO && resultCode == RESULT_OK && data != null) {
             Uri ubicacion = data.getData();
             Bitmap imagenFoto = null;
@@ -120,8 +112,9 @@ public class MainActivity extends AppCompatActivity {
             if (imagenFoto != null) {
                 caraFragment = new CaraFragment();
                 Bundle datos = new Bundle();
-                datos.putByteArray(getString(R.string.param_img), bitmapToByteArray(imagenFoto));
-                doFragmentTransaction( buttonFragment, getString(R.string.cara_fragment), true, "");
+                datos.putByteArray(getString(R.string.param_img), bitmapToByteArray(imagenFoto)); //Hay que convertir la foto a byte[] para pasarla en el bundle
+                caraFragment.setArguments(datos);
+                doFragmentTransaction( caraFragment, getString(R.string.cara_fragment), true, "");
             }
         }
     }
