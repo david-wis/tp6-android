@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TP6</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="button_fragment">BOTON FRAGMENT</string>
+    <string name="cara_fragment">CARA FRAGMENT</string>
+    <string name="param_img">PNG CARA</string>
+</resources>
