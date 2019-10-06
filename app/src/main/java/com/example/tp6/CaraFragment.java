@@ -113,18 +113,35 @@ public class CaraFragment extends Fragment {
     }
 
     private void procesarRecuadros(Face[] faces) {
-        //TODO: Hace esto abril :v
         int cantHombres = preferencias.getInt("cantHombres", 0), cantMujeres = preferencias.getInt("cantMujeres", 0);
         String mensaje = "";
         for(int i = 0; i < faces.length; i++){
-            i++;
             mensaje += "Edad: " + faces[i].faceAttributes.age;
             mensaje += " - Sonrisa: " + faces[i].faceAttributes.smile;
             mensaje += " - Barba: " + faces[i].faceAttributes.facialHair.beard;
-            mensaje += "Género: " + faces[i].faceAttributes.gender;
-            mensaje += "Anteojos: " + faces[i].faceAttributes.glasses;
+            String genero = faces[i].faceAttributes.gender.equals("male")? "hombre" : "mujer";
+            mensaje += " - Género: " +  genero;
+            String anteojos;
+            switch (faces[i].faceAttributes.glasses) {
+                case NoGlasses:
+                    anteojos = "no";
+                    break;
+                case ReadingGlasses:
+                    anteojos = "para leer";
+                    break;
+                case Sunglasses:
+                    anteojos = "de sol";
+                    break;
+                case SwimmingGoggles:
+                    anteojos = "antiparras";
+                    break;
+                default:
+                    anteojos = "desconocido";
+                    break;
+            }
+            mensaje += " - Anteojos: " + anteojos;
 
-            if(faces[i].faceAttributes.gender.equals("male")){
+            if(genero == "hombre"){
                 cantHombres++;
             } else {
                 cantMujeres++;
@@ -139,10 +156,10 @@ public class CaraFragment extends Fragment {
             if(i < faces.length-1){
                 mensaje += "\n";
             }
-
-            mensaje += " - Cantidad de hombres: " + cantHombres + " - Cantidad de mujeres: " + cantMujeres;
-            txtResult.setText(mensaje);
         }
+
+        mensaje += "\nCantidad de hombres: " + cantHombres + " - Cantidad de mujeres: " + cantMujeres;
+        txtResult.setText(mensaje);
     }
 
 }

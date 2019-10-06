@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         progressDialog = new ProgressDialog(this);
         AgregarReferencias();
-        //ACA HAY QUE AGREGAR ALGO
         adminFragments = getFragmentManager();
         InicializarBotones();
     }
@@ -98,15 +97,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         //TODO: Podemos poner un cosito de cargando aca
         if (requestCode == CODIGO_TOMAR_FOTO && resultCode == RESULT_OK) {
-
             Bitmap fotoRecibida = (Bitmap) data.getExtras().get("data");
             caraFragment = new CaraFragment();
             Bundle datos = new Bundle();
             datos.putByteArray("PNG CARA", bitmapToByteArray(fotoRecibida));
             caraFragment.setArguments(datos);
             doFragmentTransaction(caraFragment, "CARA FRAGMENT", true, "");
-
-            //TODO: hace esto abril :v
         } else if (requestCode == CODIGO_OBTENER_FOTO && resultCode == RESULT_OK && data != null) {
             Uri ubicacion = data.getData();
             Bitmap imagenFoto = null;

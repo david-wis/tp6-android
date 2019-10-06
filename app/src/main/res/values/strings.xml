@@ -4,5 +4,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="button_fragment">BOTON FRAGMENT</string>
     <string name="cara_fragment">CARA FRAGMENT</string>
-    <string name="param_img">PNG CARA</string>
+    <string name="param_img">JPG CARA</string>
 </resources>
