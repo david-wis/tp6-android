@@ -3,6 +3,9 @@ package com.example.tp6;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.Preference;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.microsoft.projectoxford.face.FaceServiceRestClient;
 import com.microsoft.projectoxford.face.contract.Face;
 import com.microsoft.projectoxford.face.contract.FaceRectangle;
@@ -35,6 +37,7 @@ public class CaraFragment extends Fragment {
     FaceServiceRestClient servicioProcImagenes;
     TextView txtResult;
     ImageView imgResultado;
+    SharedPreferences preferencias;
 
     public CaraFragment() {
         // Required empty public constructor
@@ -44,6 +47,7 @@ public class CaraFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         miView = inflater.inflate(R.layout.fragment_cara, container, false);
         AgregarReferencias();
+        preferencias = getActivity().getSharedPreferences("preferencias", Context.MODE_PRIVATE);
         dialogoProgreso = new ProgressDialog(getContext());
         configFaceRecog();
         byte[] byteArray = getArguments().getByteArray(getString(R.string.param_img));
@@ -110,6 +114,35 @@ public class CaraFragment extends Fragment {
 
     private void procesarRecuadros(Face[] faces) {
         //TODO: Hace esto abril :v
+        int cantHombres = preferencias.getInt("cantHombres", 0), cantMujeres = preferencias.getInt("cantMujeres", 0);
+        String mensaje = "";
+        for(int i = 0; i < faces.length; i++){
+            i++;
+            mensaje += "Edad: " + faces[i].faceAttributes.age;
+            mensaje += " - Sonrisa: " + faces[i].faceAttributes.smile;
+            mensaje += " - Barba: " + faces[i].faceAttributes.facialHair.beard;
+            mensaje += "Género: " + faces[i].faceAttributes.gender;
+            mensaje += "Anteojos: " + faces[i].faceAttributes.glasses;
+
+            if(faces[i].faceAttributes.gender.equals("male")){
+                cantHombres++;
+            } else {
+                cantMujeres++;
+            }
+
+            SharedPreferences.Editor editorPreferencias;
+            editorPreferencias = preferencias.edit();
+            editorPreferencias.putInt("cantHombres", cantHombres);
+            editorPreferencias.putInt("cantMujeres", cantMujeres);
+            editorPreferencias.commit();
+
+            if(i < faces.length-1){
+                mensaje += "\n";
+            }
+
+            mensaje += " - Cantidad de hombres: " + cantHombres + " - Cantidad de mujeres: " + cantMujeres;
+            txtResult.setText(mensaje);
+        }
     }
 
 }
